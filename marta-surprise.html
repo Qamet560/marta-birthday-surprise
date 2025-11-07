@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Marta 💖</title>
+    <style>
+        /* Bütün CSS burada */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Birinci səhifə üçün CSS */
+        .birthday-page {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: 20px;
+        }
+        
+        .birthday-title {
+            font-size: 3em;
+            color: #e91e63;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-line {
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 15px;
+            background: #fff9c4;
+            border-left: 5px solid #ffeb3b;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .emoji-container {
+            font-size: 2.5em;
+            margin: 30px 0;
+            opacity: 0;
+        }
+        
+        .next-button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+            opacity: 0;
+        }
+        
+        .next-button:hover {
+            background: #c2185b;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.6);
+        }
+        
+        .heart {
+            color: #e91e63;
+            animation: heartbeat 1.5s ease infinite;
+            display: inline-block;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 3D səhifə üçün CSS */
+        .scene-page {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #letter-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 500px;
+            text-align: center;
+            border: 4px solid #e91e63;
+            animation: modalAppear 0.5s ease;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        #letter-modal h2 {
+            color: #e91e63;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        
+        #letter-modal p {
+            line-height: 1.7;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        #close-letter {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        #close-letter:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+        }
+        
+        .ui-text {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 1em;
+            z-index: 100;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(233, 30, 99, 0.9);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(194, 24, 91, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* Canvas üçün */
+        #scene-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Birinci səhifə -->
+    <div class="birthday-page" id="birthdayPage">
+        <div class="container">
+            <div class="emoji-container" id="cake">🎂</div>
+            
+            <h1 class="birthday-title" id="title">HAPPY BIRTHDAY MARTA!</h1>
+            
+            <div class="message-line" id="line1">Today's your birthday...</div>
+            
+            <div class="message-line" id="line2">So I made you this computer program...</div>
+            
+            <div class="emoji-container" id="emojis">
+                <span>(@_0)?</span>
+                <span>(@_0)?</span> 
+                <span>(@_0)?</span>
+            </div>
+            
+            <div class="message-line" id="specialMessage" style="background: #e3f2fd; border-left-color: #2196f3;">
+                <strong>This program was made especially for YOU<span class="heart">💖</span></strong>
+            </div>
+            
+            <button class="next-button" id="nextBtn" onclick="show3DScene()">Enter Your Special 3D World →</button>
+        </div>
+    </div>
+
+    <!-- İkinci səhifə - 3D Səhnə -->
+    <div class="scene-page" id="scenePage">
+        <button class="back-button" onclick="showBirthdayPage()">← Back to Birthday</button>
+        
+        <div class="ui-text">Click on the letter 💌 on the table to open your special message!</div>
+        
+        <div id="letter-modal">
+            <h2>💌 For My Beautiful Marta 💌</h2>
+            <p>
+                My dearest Marta,<br><br>
+                
+                You are the most amazing, beautiful, and wonderful girl I've ever known! 
+                Your smile lights up my world, your laughter is my favorite melody, 
+                and your heart is pure gold.<br><br>
+                
+                I wrote this program especially for YOU because you deserve something 
+                as unique and special as you are. Every moment with you is magical, 
+                and I'm so grateful to have you in my life.<br><br>
+                
+                You're not just beautiful on the outside - your kindness, intelligence, 
+                and beautiful soul make you absolutely perfect in every way.<br><br>
+                
+                Happy Birthday my love!<br>
+                Forever yours 💖
+            </p>
+            <button id="close-letter">Close Letter</button>
+        </div>
+
+        <div id="scene-container"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Səhifə dəyişdirmə funksiyaları
+        function show3DScene() {
+            document.getElementById('birthdayPage').style.display = 'none';
+            document.getElementById('scenePage').style.display = 'block';
+            init3DScene();
+        }
+
+        function showBirthdayPage() {
+            document.getElementById('scenePage').style.display = 'none';
+            document.getElementById('birthdayPage').style.display = 'flex';
+        }
+
+        // Birinci səhifə animasiyaları
+        setTimeout(() => {
+            document.getElementById('cake').classList.add('fade-in');
+        }, 500);
+        
+        setTimeout(() => {
+            document.getElementById('title').classList.add('fade-in-up');
+        }, 1000);
+        
+        setTimeout(() => {
+            document.getElementById('line1').classList.add('fade-in-up');
+        }, 2000);
+        
+        setTimeout(() => {
+            document.getElementById('line2').classList.add('fade-in-up');
+        }, 3500);
+        
+        setTimeout(() => {
+            document.getElementById('emojis').classList.add('fade-in');
+        }, 5000);
+        
+        setTimeout(() => {
+            document.getElementById('specialMessage').classList.add('fade-in-up');
+        }, 6000);
+        
+        setTimeout(() => {
+            document.getElementById('nextBtn').classList.add('fade-in');
+        }, 7000);
+
+        // 3D Səhnə kodu
+        let scene, camera, renderer, letter, heart, petals;
+
+        function init3DScene() {
+            // Səhnə, kamera və renderer
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            
+            const container = document.getElementById('scene-container');
+            container.innerHTML = '';
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x87CEEB);
+            container.appendChild(renderer.domElement);
+
+            // Otaq
+            const roomGeometry = new THREE.BoxGeometry(20, 10, 20);
+            const roomMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xf8f8ff,
+                side: THREE.BackSide
+            });
+            const room = new THREE.Mesh(roomGeometry, roomMaterial);
+            scene.add(room);
+
+            // Döşəmə
+            const floorGeometry = new THREE.PlaneGeometry(20, 20);
+            const floorMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x8B4513
+            });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -5;
+            scene.add(floor);
+
+            // Pəncərə
+            const windowGeometry = new THREE.PlaneGeometry(6, 4);
+            const windowMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xaaccff,
+                transparent: true,
+                opacity: 0.6
+            });
+            const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
+            windowMesh.position.set(0, 1, -9.9);
+            scene.add(windowMesh);
+
+            // Stol
+            const tableGeometry = new THREE.CylinderGeometry(3, 3, 0.4, 32);
+            const tableMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x8B4513,
+                shininess: 30 
+            });
+            const table = new THREE.Mesh(tableGeometry, tableMaterial);
+            table.position.set(0, -3, 0);
+            scene.add(table);
+
+            // Qırmızı gül
+            const stemGeometry = new THREE.CylinderGeometry(0.08, 0.08, 1.5, 8);
+            const stemMaterial = new THREE.MeshPhongMaterial({ color: 0x228B22 });
+            stem = new THREE.Mesh(stemGeometry, stemMaterial);
+            stem.position.set(2, -2.2, 0);
+            scene.add(stem);
+
+            const petalGeometry = new THREE.SphereGeometry(0.4, 12, 12);
+            const petalMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xff3366,
+                shininess: 100 
+            });
+            petals = new THREE.Mesh(petalGeometry, petalMaterial);
+            petals.position.set(2, -1.5, 0);
+            scene.add(petals);
+
+            // Məktub
+            const letterGeometry = new THREE.BoxGeometry(0.8, 0.5, 0.1);
+            const letterMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xffffff,
+                shininess: 50 
+            });
+            letter = new THREE.Mesh(letterGeometry, letterMaterial);
+            letter.position.set(-2, -2.8, 0.5);
+            letter.userData = { isLetter: true };
+            scene.add(letter);
+
+            // Məktub üzərindəki ürək
+            const heartGeometry = new THREE.SphereGeometry(0.12, 12, 12);
+            const heartMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xe91e63,
+                emissive: 0xff69b4,
+                emissiveIntensity: 0.3
+            });
+            heart = new THREE.Mesh(heartGeometry, heartMaterial);
+            heart.position.set(-2, -2.8, 0.61);
+            scene.add(heart);
+
+            // İşıqlar
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(10, 15, 10);
+            scene.add(directionalLight);
+
+            const windowLight = new THREE.DirectionalLight(0xaaccff, 0.7);
+            windowLight.position.set(0, 5, -15);
+            scene.add(windowLight);
+
+            // Kamera
+            camera.position.set(0, 0, 12);
+            camera.lookAt(0, 0, 0);
+
+            // Məktub interaksiyası
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+
+            function onMouseClick(event) {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(scene.children);
+                
+                for (let i = 0; i < intersects.length; i++) {
+                    if (intersects[i].object.userData.isLetter) {
+                        document.getElementById('letter-modal').style.display = 'block';
+                        break;
+                    }
+                }
+            }
+
+            window.addEventListener('click', onMouseClick, false);
+
+            // Məktubu bağlamaq
+            document.getElementById('close-letter').addEventListener('click', function() {
+                document.getElementById('letter-modal').style.display = 'none';
+            });
+
+            // Animasiya
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                if (petals) {
+                    petals.rotation.y += 0.02;
+                    petals.position.y = -1.5 + Math.sin(Date.now() * 0.001) * 0.2;
+                }
+                
+                if (letter && heart) {
+                    letter.rotation.z = Math.sin(Date.now() * 0.001) * 0.15;
+                    heart.rotation.z = Math.sin(Date.now() * 0.001) * 0.15;
+                    heart.material.emissiveIntensity = 0.3 + Math.sin(Date.now() * 0.003) * 0.2;
+                }
+                
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        }
+
+        // Pencere ölçüsü dəyişdikdə
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+    </script>
+</body>
+</html>
